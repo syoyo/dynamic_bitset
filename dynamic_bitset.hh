@@ -241,6 +241,11 @@ class dynamic_bitset {
     return _data.data();
   }
 
+  // Return memory address of bitfield(as an byte array)
+  uint8_t *data() {
+    return _data.data();
+  }
+
 
  private:
   size_t _num_bits{0};
