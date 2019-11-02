@@ -1,5 +1,7 @@
 # Simple dynamic_bitset implementation in C++11
 
+[![Build Status](https://dev.azure.com/syoyo/lte%20oss/_apis/build/status/syoyo.dynamic_bitset?branchName=master)](https://dev.azure.com/syoyo/lte%20oss/_build/latest?definitionId=3&branchName=master)
+
 dynamic_bitset is implemented as a template class, so you can just include the header file to use it.
 
 ## Requirements
