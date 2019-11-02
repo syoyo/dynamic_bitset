@@ -3,7 +3,7 @@
 [![Build Status](https://dev.azure.com/syoyo/lte%20oss/_apis/build/status/syoyo.dynamic_bitset?branchName=master)](https://dev.azure.com/syoyo/lte%20oss/_build/latest?definitionId=3&branchName=master)
 
 `dynamic_bitset` is implemented as a template class, so you can just include the header file to use it.
-`dynamic_bitset` does not depends any library except for STL.
+`dynamic_bitset` does not depend any library except for STL.
 
 ## Requirements
 
