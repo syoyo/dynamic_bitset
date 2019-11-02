@@ -167,7 +167,7 @@ class dynamic_bitset {
   ///
   /// @return The number of bits that are set to `true`
   ///
-  uint32_t count() {
+  uint32_t count() const {
 
     uint32_t c = 0;
 
