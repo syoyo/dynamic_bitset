@@ -61,14 +61,14 @@ class dynamic_bitset {
   explicit dynamic_bitset(size_t nbits, uint64_t value) {
     _num_bits = nbits;
 
-    size_t num_words;
+    size_t num_bytes;
     if (nbits < 8) {
-      num_words = 1;
+      num_bytes = 1;
     } else {
-      num_words = 1 + (nbits - 8) / 8;
+      num_bytes = 1 + (nbits - 1) / 8;
     }
 
-    _data.resize(num_words);
+    _data.resize(num_bytes);
 
     // init with zeros
     std::fill_n(_data.begin(), _data.size(), 0);
@@ -77,7 +77,7 @@ class dynamic_bitset {
 
     if (nbits < sizeof(uint64_t)) {
 
-      assert(num_words < 3);
+      assert(num_bytes < 3);
 
       uint64_t masked_value = value & ((1 << (nbits +1)) - 1);
 
@@ -154,14 +154,14 @@ class dynamic_bitset {
 
     _num_bits = nbits;
 
-    size_t num_words;
+    size_t num_bytes;
     if (nbits < 8) {
-      num_words = 1;
+      num_bytes = 1;
     } else {
-      num_words = 1 + (nbits - 8) / 8;
+      num_bytes = 1 + (nbits - 1) / 8;
     }
 
-    _data.resize(num_words);
+    _data.resize(num_bytes);
   }
 
   ///
@@ -225,6 +225,22 @@ class dynamic_bitset {
 
     return (_data[byte_loc] >> offset) & 0x1;
   }
+
+  // Return the number of bits.
+  size_t nbits() const {
+    return _num_bits;
+  }
+
+  // Return storage size.
+  size_t size() const {
+    return _data.size();
+  }
+
+  // Return memory address of bitfield(as an byte array)
+  const uint8_t *data() const {
+    return _data.data();
+  }
+
 
  private:
   size_t _num_bits{0};

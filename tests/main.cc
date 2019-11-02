@@ -88,11 +88,38 @@ static void test_flip()
   }
 }
 
+static void test_data()
+{
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    uint8_t value = (*db.data());
+
+    TEST_CHECK(42 == value);
+
+  }
+
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+
+    TEST_CHECK(12 == db.nbits());
+
+    // size is in byte size. 1 + (bits - 1) / 8
+    TEST_CHECK(2 == db.size());
+  }
+
+  {
+    dynamic_bitset db(/* bits */64, /* value */42);
+
+    TEST_CHECK(8 == db.size());
+  }
+}
+
 TEST_LIST = {
   { "dynamic_bitset", test_dynamic_bitset },
   { "test_initial_value", test_initial_value },
   { "test_set", test_set },
   { "test_flip", test_flip },
+  { "test_data", test_data },
   { nullptr, nullptr }
 };
 
