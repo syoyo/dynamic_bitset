@@ -52,9 +52,47 @@ static void test_initial_value()
 
 }
 
+static void test_set()
+{
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    db.setall(true);
+
+    for (size_t i = 0; i < 12; i++) {
+      TEST_CHECK(true == db[i]);
+    }
+
+    db.set(11, false);
+    TEST_CHECK(false == db.test(11));
+
+    db.setall(false);
+
+    for (size_t i = 0; i < 12; i++) {
+      TEST_CHECK(false == db[i]);
+    }
+  }
+}
+
+static void test_flip()
+{
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    std::bitset<12> b(42);
+
+    db.flip();
+    b.flip();
+
+    for (size_t i = 0; i < 12; i++) {
+      TEST_CHECK(b[i] == db[i]);
+    }
+  }
+}
+
 TEST_LIST = {
   { "dynamic_bitset", test_dynamic_bitset },
   { "test_initial_value", test_initial_value },
+  { "test_set", test_set },
+  { "test_flip", test_flip },
   { nullptr, nullptr }
 };
 

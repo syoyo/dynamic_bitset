@@ -107,6 +107,43 @@ class dynamic_bitset {
   }
 
   ///
+  /// Equivalent to std::bitset::all()
+  ///
+  bool all() const {
+    for (size_t i = 0; i < _num_bits; i++) {
+      if (false == (*this)[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  ///
+  /// Equivalent to std::bitset::none()
+  ///
+  bool none() const {
+    for (size_t i = 0; i < _num_bits; i++) {
+      if ((*this)[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  ///
+  /// Equivalent to std::bitset::flip()
+  ///
+  dynamic_bitset &flip() {
+    for (size_t i = 0; i < _num_bits; i++) {
+      set(i, (*this)[i] ? false : true);
+    }
+
+    return (*this);
+  }
+
+  ///
   /// @brief Resize dynamic_bitset.
   ///
   /// @details Resize dynamic_bitset. Resize behavior is similar to std::vector::resize.
@@ -148,6 +185,13 @@ class dynamic_bitset {
 
   void reset() {
     std::fill_n(_data.begin(), _data.size(), 0);
+  }
+
+  // Set all bitfield with `value`
+  void setall(bool value) {
+    for (size_t i = 0; i < _num_bits; i++) {
+      set(i, value);
+    }
   }
 
   void set(size_t pos, bool value = true) {
