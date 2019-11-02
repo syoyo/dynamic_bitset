@@ -10,6 +10,7 @@
 #endif
 
 #include <bitset>
+#include <iostream>
 
 #include "dynamic_bitset.hh"
 
@@ -25,8 +26,35 @@ static void test_dynamic_bitset()
 
 }
 
+static void test_initial_value()
+{
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    std::bitset<12> b(42);
+
+    for (size_t i = 0; i < 12; i++) {
+      TEST_CHECK(db[i] == b[i]);
+    }
+
+    TEST_CHECK(db.to_string().compare(b.to_string()) == 0);
+  }
+
+  {
+    dynamic_bitset db(/* bits */48, /* value */0x123f80000);
+    std::bitset<48> b(0x123f80000);
+
+    for (size_t i = 0; i < 48; i++) {
+      TEST_CHECK(db[i] == b[i]);
+    }
+
+    TEST_CHECK(db.to_string().compare(b.to_string()) == 0);
+  }
+
+}
+
 TEST_LIST = {
   { "dynamic_bitset", test_dynamic_bitset },
+  { "test_initial_value", test_initial_value },
   { nullptr, nullptr }
 };
 

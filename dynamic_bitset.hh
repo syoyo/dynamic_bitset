@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include <string>
 #include <sstream>
 
+//#include <iostream> // dbg
+
 // TODO(syoyo): Consider endianness
 
 ///
@@ -54,8 +56,9 @@ class dynamic_bitset {
   /// @brief Construct dynamic_bitset with given number of bits.
   ///
   /// @param[in] nbits The number of bits to use.
+  /// @param[in] value Initize bitfield with this value.
   ///
-  explicit dynamic_bitset(size_t nbits) {
+  explicit dynamic_bitset(size_t nbits, uint64_t value) {
     _num_bits = nbits;
 
     size_t num_words;
@@ -69,6 +72,38 @@ class dynamic_bitset {
 
     // init with zeros
     std::fill_n(_data.begin(), _data.size(), 0);
+
+    // init with `value`.
+
+    if (nbits < sizeof(uint64_t)) {
+
+      assert(num_words < 3);
+
+      uint64_t masked_value = value & ((1 << (nbits +1)) - 1);
+
+      for (size_t i = 0; i < _data.size(); i++) {
+        _data[i] = (masked_value >> (i * 8)) & 0xff;
+      }
+
+    } else {
+      for (size_t i = 0; i < sizeof(uint64_t); i++) {
+        _data[i] = (value >> (i * 8)) & 0xff;
+      }
+    }
+
+  }
+
+  ///
+  /// Equivalent to std::bitset::any()
+  ///
+  bool any() const {
+    for (size_t i = 0; i < _num_bits; i++) {
+      if ((*this)[i]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   ///
@@ -104,6 +139,11 @@ class dynamic_bitset {
     }
 
     return c;
+  }
+
+  bool test(size_t pos) const {
+    // TODO(syoyo): Do range check and throw when out-of-bounds access.
+    return (*this)[pos];
   }
 
   void reset() {

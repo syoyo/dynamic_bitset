@@ -11,8 +11,8 @@ dynamic_bitset is implemented as a template class, so you can just include the h
 ```
 #include "dynamic_bitset.hh"
 
-// init with 13 bits
-dynamic_bitset db(13);
+// init with 13 bits. fill bitfield with value `42`
+dynamic_bitset db(13, 42);
 
 // init with 0bits
 dynamic_bitset db;
@@ -22,6 +22,9 @@ db.resize(12);
 
 // set 3rd bit true
 db.set(3);
+
+// get 5th bit state
+std::cout << db[5] << "\n";
 
 // print bitfield
 std::cout << db.to_string() << "\n";
@@ -34,7 +37,7 @@ dynamic_bitset is not compatible with `boost::dynamic_bitset`.
 ## TODO
 
 * [ ] Implement more features.
-* [ ] Endianness.
+* [ ] Validate endianness.
 * [ ] Write more tests.
 
 ## License
