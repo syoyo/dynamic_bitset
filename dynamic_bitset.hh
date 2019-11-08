@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include <vector>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 //#include <iostream> // dbg
 
@@ -144,6 +145,15 @@ class dynamic_bitset {
   }
 
   ///
+  /// Equivalent to std::bitset::flip(size_t pos)
+  ///
+  dynamic_bitset &flip(size_t pos) {
+    set(pos, (*this)[pos] ? false : true);
+
+    return (*this);
+  }
+
+  ///
   /// @brief Resize dynamic_bitset.
   ///
   /// @details Resize dynamic_bitset. Resize behavior is similar to std::vector::resize.
@@ -219,6 +229,38 @@ class dynamic_bitset {
     return ss.str();
   }
 
+  //
+  // bits are truncated to 32bit uint
+  // In contrast to `std::bitset::to_ulong()`, this function does not throw overflow_error even num_bits are larger than 32.
+  //
+  uint32_t to_ulong() {
+    uint32_t value = 0;
+
+    // TODO(syoyo): optimize code
+    size_t n = std::min(_num_bits, size_t(32));
+    for (size_t i = 0; i < n; i++) {
+      value |= uint32_t(((*this)[i])) << i;
+    }
+
+    return value;
+  }
+
+  //
+  // bits are truncated to 64bit uint
+  // In contrast to `std::bitset::to_ullong()`, this function does not throw overflow_error even num_bits are larger than 64.
+  //
+  uint64_t to_ullong() {
+    uint64_t value = 0;
+
+    // TODO(syoyo): optimize code
+    size_t n = std::min(_num_bits, size_t(64));
+    for (size_t i = 0; i < n; i++) {
+      value |= uint64_t(((*this)[i])) << i;
+    }
+
+    return value;
+  }
+
   bool operator[](size_t pos) const {
     size_t byte_loc = pos / 8;
     size_t offset = pos % 8;
@@ -226,14 +268,15 @@ class dynamic_bitset {
     return (_data[byte_loc] >> offset) & 0x1;
   }
 
-  // Return the number of bits.
-  size_t nbits() const {
-    return _num_bits;
+  // Return the storage size(in bytes)
+  size_t storage_size() const {
+    return _data.size();
   }
 
-  // Return storage size.
+  // Return the number of bits.
+  // equivalent to std::bitset::size
   size_t size() const {
-    return _data.size();
+    return _num_bits;
   }
 
   // Return memory address of bitfield(as an byte array)

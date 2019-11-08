@@ -85,8 +85,42 @@ static void test_flip()
     for (size_t i = 0; i < 12; i++) {
       TEST_CHECK(b[i] == db[i]);
     }
+
+    db.flip(3);
+    b.flip(3);
+    TEST_CHECK(b[3] == db[3]);
+  }
+
+}
+
+static void test_to_ulong()
+{
+  // TODO(LTE): Write test for bits > 32.
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    std::bitset<12> b(42);
+
+    uint64_t db_value = db.to_ulong();
+    uint64_t b_value = b.to_ulong();
+
+    TEST_CHECK(db_value == b_value);
   }
 }
+
+static void test_to_ullong()
+{
+  // TODO(LTE): Write test for bits > 64.
+  {
+    dynamic_bitset db(/* bits */12, /* value */42);
+    std::bitset<12> b(42);
+
+    uint64_t db_value = db.to_ullong();
+    uint64_t b_value = b.to_ullong();
+
+    TEST_CHECK(db_value == b_value);
+  }
+}
+
 
 static void test_data()
 {
@@ -101,16 +135,17 @@ static void test_data()
   {
     dynamic_bitset db(/* bits */12, /* value */42);
 
-    TEST_CHECK(12 == db.nbits());
+    TEST_CHECK(12 == db.size());
 
     // size is in byte size. 1 + (bits - 1) / 8
-    TEST_CHECK(2 == db.size());
+    TEST_CHECK(2 == db.storage_size());
   }
 
   {
     dynamic_bitset db(/* bits */64, /* value */42);
 
-    TEST_CHECK(8 == db.size());
+    TEST_CHECK(64 == db.size());
+    TEST_CHECK(8 == db.storage_size());
   }
 }
 
@@ -120,6 +155,8 @@ TEST_LIST = {
   { "test_set", test_set },
   { "test_flip", test_flip },
   { "test_data", test_data },
+  { "test_to_ulong", test_to_ulong },
+  { "test_to_ullong", test_to_ullong },
   { nullptr, nullptr }
 };
 
